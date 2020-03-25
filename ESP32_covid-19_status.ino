@@ -15,7 +15,7 @@
 U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);   // All Boards without Reset of the Display
 
 
-
+const char* host = "coronavirus-19-api.herokuapp.com";
 
 WifiManager manager;
 
@@ -51,6 +51,11 @@ void setup()
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
+  u8g2.println("");
+  u8g2.println("WiFi connected");
+  u8g2.println("IP address: ");
+  u8g2.println(WiFi.localIP());
 }
 
 int value = 0;
@@ -74,8 +79,8 @@ void loop()
   WiFiClient client;
   const int httpPort = 80;
   if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    return;
+   Serial.println("connection failed");
+   return;
   }
 
   // We now create a URI for the request
@@ -110,7 +115,9 @@ void loop()
   //}
 
   //const size_t capacity = JSON_OBJECT_SIZE(3) + 30;
-  const size_t capacity = JSON_OBJECT_SIZE(9) + 120;
+  //const size_t capacity = JSON_OBJECT_SIZE(9) + 120;
+  const size_t capacity = JSON_OBJECT_SIZE(10) + 140;
+  
   DynamicJsonDocument doc(capacity);
 
   //const char* json = "{\"cases\":245613,\"deaths\":10048,\"recovered\":88437}";
@@ -146,7 +153,7 @@ void loop()
 
 
   long cases = doc["cases"]; // 245613
-  int deaths = doc["deaths"]; // 10048
+  long deaths = doc["deaths"]; // 10048
   long recovered = doc["recovered"]; // 88437
 
   Serial.println(cases);
